@@ -26,7 +26,7 @@ cd Convert_PDF_CSV
    - En **Windows**:
 
      ```bash
-     venv\Scriptsctivate
+     venv\Scripts\activate
      ```
 
    - En **macOS/Linux**:
