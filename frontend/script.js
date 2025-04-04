@@ -42,3 +42,9 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
         console.error(error);
     }
 });
+
+// Mostrar el nombre del archivo seleccionado
+document.getElementById("fileInput").addEventListener("change", function () {
+    const fileName = this.files[0] ? this.files[0].name : "Ningún archivo seleccionado";
+    document.getElementById("fileName").textContent = fileName;
+});

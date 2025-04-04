@@ -7,13 +7,22 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Conversor de PDF a CSV</h1>
-    <form id="uploadForm">
-        <input type="file" id="fileInput" accept=".pdf" required>
-        <button type="submit">Subir y Convertir</button>
-    </form>
-    <p id="message"></p>
-    <a id="downloadLink" style="display: none;">Descargar CSV</a>
+    <div class="container">
+        <h1>Conversor de PDF a CSV</h1>
+        
+        <!-- Formulario de subida -->
+        <form id="uploadForm">
+            <label for="fileInput" class="file-label">
+                Seleccionar Archivo PDF
+                <input type="file" id="fileInput" accept=".pdf" required hidden>
+            </label>
+            <span id="fileName">Ningún archivo seleccionado</span>
+            <button type="submit" class="convert-button">Subir y Convertir</button>
+        </form>
+
+        <p id="message"></p>
+        <a id="downloadLink" style="display: none;" class="download-button">Descargar CSV</a>
+    </div>
 
     <script src="script.js"></script>
 </body>
