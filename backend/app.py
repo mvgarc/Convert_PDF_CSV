@@ -39,11 +39,15 @@ def extract_text_pdf(pdf_path):
                         extracted_data.append([code, description, price])
     
     if extracted_data:
+        print(f"Datos extraídos: {extracted_data}")  # <--- Agrega esto para depuración
         csv_filename = os.path.join(OUTPUT_FOLDER, os.path.basename(pdf_path).replace(".pdf", ".csv"))
         df = pd.DataFrame(extracted_data, columns=["Código", "Descripción", "Precio"])
         df.to_csv(csv_filename, index=False, encoding="utf-8")
+        print(f"CSV guardado en: {csv_filename}")  # <--- Verificar ruta del archivo
         return csv_filename
-    return None
+    else:
+        print("No se extrajo información válida del PDF.")  # <--- Verificar si hay datos
+        return None
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
