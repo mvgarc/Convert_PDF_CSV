@@ -2,7 +2,10 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
     event.preventDefault();
 
     const fileInput = document.getElementById("fileInput");
-    if (!fileInput.files.length) return alert("Por favor, selecciona un archivo.");
+    if (!fileInput.files.length) {
+        alert("Por favor, selecciona un archivo.");
+        return;
+    }
 
     const formData = new FormData();
     formData.append("file", fileInput.files[0]);
@@ -29,7 +32,7 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
         const url = window.URL.createObjectURL(blob);
 
         downloadLink.href = url;
-        downloadLink.download = "resultado.csv";  // puedes cambiar el nombre si quieres
+        downloadLink.download = "resultado.csv";  
         downloadLink.textContent = "Descargar CSV";
         downloadLink.style.display = "block";
 
