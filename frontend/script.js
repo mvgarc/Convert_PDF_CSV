@@ -2,6 +2,9 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
     event.preventDefault();
 
     const fileInput = document.getElementById("fileInput");
+    const message = document.getElementById("message");
+    const downloadLink = document.getElementById("downloadLink");
+
     if (!fileInput.files.length) {
         alert("Por favor, selecciona un archivo.");
         return;
@@ -9,9 +12,6 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
 
     const formData = new FormData();
     formData.append("file", fileInput.files[0]);
-
-    const message = document.getElementById("message");
-    const downloadLink = document.getElementById("downloadLink");
 
     message.textContent = "Procesando...";
     downloadLink.style.display = "none";
@@ -31,8 +31,17 @@ document.getElementById("uploadForm").addEventListener("submit", async function 
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
 
+        // Descargar automáticamente el archivo CSV
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "archivo_procesado.csv"; 
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // También dejar opción de descarga manual
         downloadLink.href = url;
-        downloadLink.download = "resultado.csv";  
+        downloadLink.download = "archivo_procesado.csv";
         downloadLink.textContent = "Descargar CSV";
         downloadLink.style.display = "block";
 

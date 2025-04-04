@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Permitir acceso desde frontend (JS)
+CORS(app, supports_credentials=True)  # Habilitar CORS para todas las rutas
 
 # Configuración de carpetas
 UPLOAD_FOLDER = "uploads"
@@ -29,7 +29,7 @@ def extract_text_pdf(pdf_path):
             if text:
                 lines = text.split("\n")
                 for line in lines:
-                    parts = line.split("$")
+                    parts = line.split("$")  # Ajustar si el formato varía
                     if len(parts) == 2:
                         description_code = parts[0].strip()
                         price = parts[1].strip()
@@ -37,13 +37,16 @@ def extract_text_pdf(pdf_path):
                         code = words[0] if words else ""
                         description = " ".join(words[1:])
                         extracted_data.append([code, description, price])
-
+    
     if extracted_data:
+        print(f"Datos extraídos: {extracted_data}")  # <--- Agrega esto para depuración
         csv_filename = os.path.join(OUTPUT_FOLDER, os.path.basename(pdf_path).replace(".pdf", ".csv"))
         df = pd.DataFrame(extracted_data, columns=["Código", "Descripción", "Precio"])
         df.to_csv(csv_filename, index=False, encoding="utf-8")
+        print(f"CSV guardado en: {csv_filename}")  # <--- Verificar ruta del archivo
         return csv_filename
     else:
+        print("No se extrajo información válida del PDF.")  # <--- Verificar si hay datos
         return None
 
 @app.route("/upload", methods=["POST"])
@@ -67,16 +70,14 @@ def upload_file():
             def remove_file(response):
                 try:
                     os.remove(csv_path)
-                    os.remove(pdf_path)
                 except Exception as e:
                     print(f"Error eliminando archivo: {e}")
                 return response
 
             return send_file(
                 csv_path,
-                mimetype="text/csv",
                 as_attachment=True,
-                download_name="resultado.csv"  # <= fuerza nombre de descarga
+                mimetype="text/csv"
             )
         else:
             return jsonify({"error": "No se pudo extraer información del PDF"}), 500
