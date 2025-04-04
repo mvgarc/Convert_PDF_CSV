@@ -1,18 +1,12 @@
 import os
 import pdfplumber
-import fitz  # PyMuPDF
-import pytesseract
 import pandas as pd
 from flask import Flask, request, jsonify, send_file, after_this_request
 from werkzeug.utils import secure_filename
-from PIL import Image
-import io
 from flask_cors import CORS
 
-
-
 app = Flask(__name__)
-CORS(app) # Habilitar CORS para todas las rutas
+CORS(app)  # Habilitar CORS para todas las rutas
 
 # Configuración de carpetas
 UPLOAD_FOLDER = "uploads"
