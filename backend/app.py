@@ -53,7 +53,6 @@ def extract_text_pdf(pdf_path):
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    """Recibe archivos PDF y devuelve el CSV generado."""
     if "file" not in request.files:
         return jsonify({"error": "No se encontró archivo en la solicitud"}), 400
     
@@ -67,8 +66,21 @@ def upload_file():
         file.save(pdf_path)
 
         csv_path = extract_text_pdf(pdf_path)
+        
         if csv_path:
-            return send_file(csv_path, as_attachment=True)
+            @after_this_request
+            def remove_file(response):
+                try:
+                    os.remove(csv_path)
+                except Exception as e:
+                    print(f"Error eliminando archivo: {e}")
+                return response
+
+            return send_file(
+                csv_path,
+                as_attachment=True,
+                mimetype="text/csv"
+            )
         else:
             return jsonify({"error": "No se pudo extraer información del PDF"}), 500
     

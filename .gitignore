@@ -1,0 +1,4 @@
+uploads/
+# Ignore all files in the uploads directory
+output_csv/
+# except for the output_csv subdirectory
